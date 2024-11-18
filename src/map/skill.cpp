@@ -8818,7 +8818,7 @@ int32 skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, 
 	case NPC_SELFDESTRUCTION:
 		//Self Destruction hits everyone in range (allies+enemies)
 		//Except for Summoned Marine spheres on non-versus maps, where it's just enemy.
-		i = ((!md || md->special_state.ai == AI_SPHERE) && !map_flag_vs(src->m))?
+		i = ((!md || md->special_state.ai == AI_SPHERE) && !map_flag_vs(src->m) || md && map_getmapflag(src->m, MF_NO_NPC_SELFDESTRUCTION_ON_ALL))?
 			BCT_ENEMY:BCT_ALL;
 		map_delblock(src); //Required to prevent chain-self-destructions hitting back.
 		map_foreachinshootrange(skill_area_sub, bl,
@@ -13000,6 +13000,14 @@ int32 skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, 
 		break;
 	case ALL_EVENT_20TH_ANNIVERSARY:
 		clif_skill_nodamage(src, *src, skill_id, skill_lv);
+		break;
+
+	case DE_BERSERKAIZER:
+		clif_skill_nodamage(src, bl, skill_id, skill_lv, 1);
+		break;
+
+	case DE_BERSERKAIZER:
+		clif_skill_nodamage(src, bl, skill_id, skill_lv, 1);
 		break;
 
 	default: {
